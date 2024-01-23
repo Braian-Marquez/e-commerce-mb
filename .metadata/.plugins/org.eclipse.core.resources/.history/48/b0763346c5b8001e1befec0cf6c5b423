@@ -1,0 +1,5 @@
+package com.ecommerce.mb.gateway.setups;
+
+public class AdminAuthorizationFilter {
+
+}

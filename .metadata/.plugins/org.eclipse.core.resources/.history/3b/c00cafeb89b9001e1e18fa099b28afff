@@ -1,0 +1,137 @@
+package com.ecommerce.mb.commons.models.entity;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "orders")
+public class Order {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	private String name;
+	private Double total;
+	private Long idCustomer;
+
+	@OneToOne()
+	private OrderPayment orderPayment;
+	
+	@OneToMany
+	private List<OrderDetails> orderDetails = new ArrayList<>();
+
+	@Column(name = "soft_delete")
+	private Boolean softDelete = Boolean.FALSE;
+
+	@Column(name = "created_at")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss.SSS")
+	private LocalDateTime created_at;
+
+	@Column(name = "updated_at")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss.SSS")
+	private LocalDateTime updated_at;
+
+	@PrePersist
+	public void prePersist() {
+		created_at = LocalDateTime.now();
+		updated_at = LocalDateTime.now();
+	}
+
+	@PreUpdate
+	public void preUpdate() {
+		updated_at = LocalDateTime.now();
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Double getTotal() {
+		return total;
+	}
+
+	public void setTotal(Double total) {
+		this.total = total;
+	}
+
+	public Long getIdCustomer() {
+		return idCustomer;
+	}
+
+	public void setIdCustomer(Long idCustomer) {
+		this.idCustomer = idCustomer;
+	}
+
+	public List<OrderDetails> getOrderDetails() {
+		return orderDetails;
+	}
+
+	public void setOrderDetails(List<OrderDetails> orderDetails) {
+		this.orderDetails = orderDetails;
+	}
+
+	public Boolean getSoftDelete() {
+		return softDelete;
+	}
+
+	public void setSoftDelete(Boolean softDelete) {
+		this.softDelete = softDelete;
+	}
+
+	public LocalDateTime getCreated_at() {
+		return created_at;
+	}
+
+	public void setCreated_at(LocalDateTime created_at) {
+		this.created_at = created_at;
+	}
+
+	public LocalDateTime getUpdated_at() {
+		return updated_at;
+	}
+
+	public void setUpdated_at(LocalDateTime updated_at) {
+		this.updated_at = updated_at;
+	}
+
+	public OrderPayment getOrderPayment() {
+		return orderPayment;
+	}
+
+	public void setOrderPayment(OrderPayment orderPayment) {
+		this.orderPayment = orderPayment;
+	}
+
+	public Order(Long id, String name, Double total, Long idCustomer, OrderPayment orderPayment,
+			List<OrderDetails> orderDetails, Boolean softDelete, LocalDateTime created_at, LocalDateTime updated_at) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.total = total;
+		this.idCustomer = idCustomer;
+		this.orderPayment = orderPayment;
+		this.orderDetails = orderDetails;
+		this.softDelete = softDelete;
+		this.created_at = created_at;
+		this.updated_at = updated_at;
+	}
+
+	public Order() {
+		super();
+	}
+
+}

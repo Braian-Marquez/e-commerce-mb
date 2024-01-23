@@ -1,0 +1,37 @@
+package com.ecommerce.mb.commerce.controller;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.ecommerce.mb.commerce.models.request.ProductRequest;
+import com.ecommerce.mb.commerce.service.interfaces.CategoryService;
+import com.ecommerce.mb.commons.exceptions.InvalidCredentialsException;
+import com.ecommerce.mb.commons.models.entity.Category;
+
+@Validated
+@RestController
+@RequestMapping("/admin/v1")
+public class AdminController {
+	@Autowired
+	private CategoryService categoryService;
+
+	@PostMapping("add-category")
+	public ResponseEntity<?> addCategory(
+			@RequestBody Category category)
+			throws NumberFormatException, InvalidCredentialsException, FileNotFoundException, IOException {
+		return ResponseEntity.ok(categoryService.addCategory(category));
+	}
+
+}

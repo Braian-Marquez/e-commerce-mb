@@ -1,0 +1,58 @@
+package com.ecommerce.mb.commons.models.entity;
+
+import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import jakarta.persistence.*;
+
+@Entity
+public class CategoryProducts {
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    @Column(name = "soft_delete")
+	private Boolean softDelete = Boolean.FALSE;
+
+	@Column(name = "created_at")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss.SSS")
+	private LocalDateTime created_at;
+
+	@Column(name = "updated_at")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss.SSS")
+	private LocalDateTime updated_at;
+
+	@PrePersist
+	public void prePersist() {
+		created_at = LocalDateTime.now();
+		updated_at = LocalDateTime.now();
+	}
+
+	@PreUpdate
+	public void preUpdate() {
+		updated_at = LocalDateTime.now();
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public CategoryProducts(Long id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+	public CategoryProducts() {
+		super();
+	}
+    
+}
+

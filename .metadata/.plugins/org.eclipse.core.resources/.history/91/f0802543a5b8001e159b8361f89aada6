@@ -1,0 +1,5 @@
+package com.ecommerce.mb.commerce.models.repository.criteria;
+
+public class ProductCriteria {
+
+}

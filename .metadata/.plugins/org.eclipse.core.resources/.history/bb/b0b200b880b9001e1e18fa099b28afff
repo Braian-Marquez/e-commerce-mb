@@ -1,0 +1,10 @@
+##Config
+eureka.client.register-with-eureka=true
+spring.application.name=e-commerce-mb-customer
+spring.profiles.active=native
+spring.cloud.config.uri=http://${CONFIG_SERVER:localhost}:8888
+management.endpoints.web.health.show-details=always
+management.endpoints.web.exposure.include=*
+server.port=0
+
+

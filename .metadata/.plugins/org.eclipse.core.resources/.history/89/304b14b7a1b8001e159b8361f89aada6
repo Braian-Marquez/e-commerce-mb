@@ -1,0 +1,5 @@
+package com.ecommerce.mb.commerce.service.impl;
+
+public class ProductServiceImpl {
+
+}

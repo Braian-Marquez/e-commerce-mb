@@ -1,0 +1,16 @@
+package com.ecommerce.mb.commerce.service.interfaces;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.ecommerce.mb.commerce.models.request.ProductRequest;
+import com.ecommerce.mb.commons.exceptions.InvalidCredentialsException;
+
+public interface ProductService {
+
+	Object addProduct(ProductRequest product, String profileId, MultipartFile image) throws NumberFormatException, InvalidCredentialsException;
+
+	Object updateProduct(String profileId, Long productId, ProductRequest product, MultipartFile image);
+
+	boolean deleteProduct(String profileId, Long productId);
+
+}

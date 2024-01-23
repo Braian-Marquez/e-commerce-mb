@@ -1,0 +1,16 @@
+package com.ecommerce.mb.commons.models.entity;
+
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+@SuppressWarnings("deprecation")
+@Entity
+@SQLDelete(sql = "UPDATE order-details SET soft_delete = true WHERE id=?")
+@Where(clause = "soft_delete=false")
+@Table(name = "order-details")
+public class OrderDetails {
+
+}

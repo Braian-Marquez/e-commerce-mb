@@ -1,0 +1,11 @@
+package com.ecommerce.mb.commons.models.enums;
+
+public enum CodeEnum {
+
+	USERNAME_NOT_FOUND,
+	BAD_CREDENTIALS,
+	KCY_ERROR,
+	WRONG_PASSWORD,
+    INCORRECT_DATA, CODE_201, USER_EXIST, CUSTOMER_EXIST, COMMERCE_EXIST;
+
+}

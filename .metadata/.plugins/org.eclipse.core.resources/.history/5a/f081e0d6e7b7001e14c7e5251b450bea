@@ -1,0 +1,9 @@
+package com.ecommerce.mb.commons.models.entity;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "order-payment")
+public class OrderPayment {
+
+}

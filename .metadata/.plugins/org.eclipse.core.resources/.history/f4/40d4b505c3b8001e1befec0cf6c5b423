@@ -1,0 +1,13 @@
+package com.ecommerce.mb.commerce.service.interfaces;
+
+import java.util.List;
+
+import com.ecommerce.mb.commerce.controller.CategoryController;
+
+public interface CategoryService {
+
+	List<CategoryController> getAllCategories();
+
+	CategoryController getCategoryById(Long categoryId);
+
+}

@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://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:x-oauth-basic@github.com/Braian-Marquez/mb-config.git
+          default-label: main
+          username: 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
+          password: x-oauth-basic
+server:
+  port: 8888
+

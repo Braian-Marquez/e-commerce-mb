@@ -1,0 +1,153 @@
+package com.ecommerce.mb.auth.service;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.ecommerce.mb.auth.mapper.GenericMapper;
+import com.ecommerce.mb.auth.models.entity.UserEntity;
+import com.ecommerce.mb.auth.models.repository.AdressRepository;
+import com.ecommerce.mb.auth.models.repository.CommerceRepository;
+import com.ecommerce.mb.auth.models.repository.CustomerRepository;
+import com.ecommerce.mb.auth.models.repository.RoleRepository;
+import com.ecommerce.mb.auth.models.repository.UserRepository;
+import com.ecommerce.mb.auth.models.request.AuthenticationRequest;
+import com.ecommerce.mb.auth.models.request.CommerceRequest;
+import com.ecommerce.mb.auth.models.request.CustomerRequest;
+import com.ecommerce.mb.auth.models.response.UserResponse;
+import com.ecommerce.mb.auth.security.JwtService;
+import com.ecommerce.mb.auth.utils.Messenger;
+import com.ecommerce.mb.commons.exceptions.InvalidCredentialsException;
+import com.ecommerce.mb.commons.models.entity.Adress;
+import com.ecommerce.mb.commons.models.entity.Commerce;
+import com.ecommerce.mb.commons.models.entity.Customer;
+import com.ecommerce.mb.commons.models.enums.CodeEnum;
+import com.ecommerce.mb.commons.models.enums.RoleType;
+import jakarta.transaction.Transactional;
+
+@Service
+public class UserDetailsCustomService {
+
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private CustomerRepository customerRepository;
+	@Autowired
+	private CommerceRepository commerceRepository;
+	@Autowired
+	private RoleRepository roleRepository;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private Messenger messenger;
+	@Autowired
+	private JwtService jwtService;
+	@Autowired
+	private GenericMapper mapper;
+	@Autowired
+	private AdressRepository adressRepository;
+
+	public UserEntity login(AuthenticationRequest request) throws AuthenticationException, InvalidCredentialsException {
+
+		UserEntity user = userRepository.findByEmail(request.getEmail())
+				.orElseThrow(() -> new InvalidCredentialsException(messenger.getMessage(CodeEnum.USERNAME_NOT_FOUND)));
+		if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+			throw new InvalidCredentialsException(messenger.getMessage(CodeEnum.WRONG_PASSWORD));
+		}
+		return user;
+	}
+
+	@Transactional
+	public ResponseEntity<?> saveCustomer(CustomerRequest userRequest) throws IOException {
+		try {
+		
+			Optional<UserEntity> userEntity = userRepository.findByEmail(userRequest.getEmail());
+			if (userEntity.isPresent()) {
+				throw new InvalidCredentialsException("The user exist.");
+			}
+
+			userEntity.get().setUsername(userRequest.getEmail());
+			userEntity.get().setEmail(userRequest.getEmail());
+			userEntity.get().setRoles(List.of(roleRepository.findByName(RoleType.USER.getFullRoleName())));
+			userEntity.get().setPassword(passwordEncoder.encode(userRequest.getPassword()));
+			userRepository.save(userEntity.get());
+
+			Adress adress = new Adress();
+			adress = mapper.map(userRequest.getAdress(), Adress.class);
+			adressRepository.save(adress);
+
+			Optional<Customer> customer = customerRepository.findByDni(userRequest.getDni());
+			if (customer.isPresent()) {
+				throw new InvalidCredentialsException(messenger.getMessage(CodeEnum.USER_EXIST));
+			}
+
+			Customer entity = customer.get();
+			entity = mapper.map(userRequest, Customer.class);
+			entity.setIdUser(userEntity.get().getId());
+			entity.setAdress(adress);
+			customerRepository.save(entity);
+
+			UserResponse result = new UserResponse();
+			result.setIdUser(userEntity.get().getId());
+			result.setIdCustomer(entity.getId());
+			result.setToken(jwtService.generateToken(userEntity.get()));
+
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body(result);
+
+		} catch (Exception e) {
+			System.out.print(e.getMessage());
+			return null;
+		}
+	}
+
+	public ResponseEntity<?> saveCommerce(CommerceRequest userRequest) {
+		try {
+
+			Optional<UserEntity> userEntity = userRepository.findByEmail(userRequest.getEmail());
+			if (userEntity.isPresent()) {
+				throw new InvalidCredentialsException(messenger.getMessage(CodeEnum.USER_EXIST));
+			}
+
+			userEntity.get().setUsername(userRequest.getEmail());
+			userEntity.get().setEmail(userRequest.getEmail());
+			userEntity.get().setRoles(List.of(roleRepository.findByName(RoleType.USER.getFullRoleName())));
+			userEntity.get().setPassword(passwordEncoder.encode(userRequest.getPassword()));
+			userRepository.save(userEntity.get());
+
+			Adress adress = new Adress();
+			adress = mapper.map(userRequest.getAdress(), Adress.class);
+			adressRepository.save(adress);
+
+			Optional<Commerce> commerce = commerceRepository.findByCuit(userRequest.getCuit());
+			if (commerce.isPresent()) {
+				throw new InvalidCredentialsException(messenger.getMessage(CodeEnum.USER_EXIST));
+			}
+
+			Commerce entity = commerce.get();
+
+			entity = mapper.map(userRequest, Commerce.class);
+			entity.setIdUser(userEntity.get().getId());
+			entity.setAdress(adress);
+			commerceRepository.save(entity);
+
+			UserResponse result = new UserResponse();
+			result.setIdUser(userEntity.get().getId());
+			result.setIdCustomer(entity.getId());
+			result.setToken(jwtService.generateToken(userEntity.get()));
+
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body(result);
+
+		} catch (Exception e) {
+			System.out.print(e.getMessage());
+			return null;
+		}
+	}
+
+}

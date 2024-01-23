@@ -1,0 +1,43 @@
+package com.ecommerce.mb.commerce.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.ecommerce.mb.commerce.controller.CategoryController;
+import com.ecommerce.mb.commerce.models.repository.CategoryRepository;
+import com.ecommerce.mb.commerce.service.interfaces.CategoryService;
+import com.ecommerce.mb.commons.models.entity.Category;
+
+@Service
+public class CategoryServiceImpl implements CategoryService{
+	
+	@Autowired
+    private CategoryRepository categoryRepository;
+	
+	@Override
+	public List<Category> getAllCategories() {
+		
+		return categoryRepository.findAll();
+	}
+
+	@Override
+	public CategoryController getCategoryById(Long categoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object addCategory(Category category) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean deleteCategory(Long categoryId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

@@ -1,0 +1,9 @@
+package com.ecommerce.mb.commerce.service.interfaces;
+
+import com.ecommerce.mb.commerce.models.request.ProductRequest;
+
+public interface ProductService {
+
+	Object addProduct(ProductRequest product);
+
+}

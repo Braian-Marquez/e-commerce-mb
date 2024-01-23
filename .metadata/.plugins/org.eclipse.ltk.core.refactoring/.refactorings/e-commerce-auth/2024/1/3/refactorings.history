@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;e-commerce-auth/src/main/java/com/e-commerce/mb/auth/LogicapVibeAuthApplication.java&apos; to &apos;E-commerce-MB-AuthAplication.java&apos;" description="Rename resource &apos;LogicapVibeAuthApplication.java&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/main/java/com/e-commerce/mb/auth/LogicapVibeAuthApplication.java" name="E-commerce-MB-AuthAplication.java" stamp="1705785391842" updateReferences="true"/>
+</session>

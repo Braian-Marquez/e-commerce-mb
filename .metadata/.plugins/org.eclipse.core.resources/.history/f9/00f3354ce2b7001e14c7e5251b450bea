@@ -1,0 +1,5 @@
+package com.ecommerce.mb.commons.models.entity;
+
+public class Products {
+
+}

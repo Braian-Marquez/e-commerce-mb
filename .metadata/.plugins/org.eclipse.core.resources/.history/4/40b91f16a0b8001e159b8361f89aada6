@@ -1,0 +1,22 @@
+package com.ecommerce.mb.customer.service.interfaces;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
+import com.ecommerce.mb.commons.models.entity.Adress;
+import jakarta.validation.constraints.NotBlank;
+
+public interface ProfileService {
+
+	ResponseEntity<?> updateImageProfile(MultipartFile imagen, String customerId);
+
+	Object getProfile(String customerId);
+
+	ResponseEntity<?> updateEmail(EmailRequest request, String customerId);
+
+	ResponseEntity<?> validateEmail(@NotBlank String codeEmail, @NotBlank String newEmail, String customerId);
+
+	ResponseEntity<?> updateAdress(Adress adress, String customerId);
+
+	ResponseEntity<?> updateProfile(ProfileRequest request, String customerId);
+
+}

@@ -1,0 +1,13 @@
+package com.ecommerce.mb.commons.models.enums;
+
+public enum RoleType {
+
+  ADMIN, USER;
+
+  private static final String ROLE_PREFIX = "ROLE_";
+
+  public String getFullRoleName() {
+    return ROLE_PREFIX + this.name();
+  }
+
+}

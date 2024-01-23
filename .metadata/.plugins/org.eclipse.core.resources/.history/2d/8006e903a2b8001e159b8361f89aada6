@@ -1,0 +1,5 @@
+package com.ecommerce.mb.commerce.models.request;
+
+public class ProductRequest {
+
+}

@@ -1,0 +1,13 @@
+package com.logicap.vibe.commons.models.enums;
+
+public enum RoleType {
+
+  ADMIN, USUARIO,INVITADO;
+
+  private static final String ROLE_PREFIX = "ROLE_";
+
+  public String getFullRoleName() {
+    return ROLE_PREFIX + this.name();
+  }
+
+}

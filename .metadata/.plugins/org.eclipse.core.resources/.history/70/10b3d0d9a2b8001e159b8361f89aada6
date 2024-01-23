@@ -1,0 +1,22 @@
+package com.ecommerce.mb.commerce.controller;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+
+public class FindProductsController {
+	   @GetMapping
+	    public ResponseEntity<List<Product>> getAllProducts() {
+	        List<Product> products = productService.getAllProducts();
+	        return ResponseEntity.ok(products);
+	    }
+
+	    @GetMapping("/{productId}")
+	    public ResponseEntity<Product> getProductById(@PathVariable Long productId) {
+	        Product product = productService.getProductById(productId);
+	        if (product != null) {
+	            return ResponseEntity.ok(product);
+	        } else {
+	            return ResponseEntity.notFound().build();
+	        }
+	    }
+}

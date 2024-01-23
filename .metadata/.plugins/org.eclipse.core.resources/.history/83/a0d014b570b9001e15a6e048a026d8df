@@ -1,0 +1,13 @@
+package com.ecommerce.mb.auth;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class MbAuthApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(MbAuthApplication.class, args);
+	}
+
+}

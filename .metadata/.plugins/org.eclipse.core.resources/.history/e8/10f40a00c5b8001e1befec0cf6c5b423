@@ -1,0 +1,7 @@
+package com.ecommerce.mb.gateway.response;
+
+public class TokenValidate {
+	private String role;
+	private Long idProfile;
+	
+}

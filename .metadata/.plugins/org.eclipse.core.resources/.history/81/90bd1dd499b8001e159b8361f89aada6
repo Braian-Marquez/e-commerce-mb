@@ -1,0 +1,3 @@
+USERNAME_NOT_FOUND=Credenciales incorrectas.
+USER_EXIST=El usuario ya se encuentra resgitrado.
+WRONG_PASSWORD=Credenciales incorrectas.

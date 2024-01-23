@@ -1,0 +1,51 @@
+package com.ecommerce.mb.commerce.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.ecommerce.mb.commerce.models.repository.CategoryRepository;
+import com.ecommerce.mb.commerce.models.repository.CommerceRepository;
+import com.ecommerce.mb.commerce.models.repository.ImageRepository;
+import com.ecommerce.mb.commerce.models.repository.ProductRepository;
+import com.ecommerce.mb.commerce.models.request.ProductRequest;
+import com.ecommerce.mb.commerce.service.interfaces.ProductService;
+import com.ecommerce.mb.commerce.utils.FirebaseCredenciales;
+import com.ecommerce.mb.commerce.utils.Messenger;
+
+@Service
+public class ProductServiceImpl implements ProductService{
+	@Autowired
+    private ProductRepository productRepository;
+	@Autowired
+    private CommerceRepository commerceRepository;
+	@Autowired
+    private CategoryRepository categoryRepository;
+	@Autowired
+    private ImageRepository imageRepository;
+	@Autowired
+    private FirebaseCredenciales firebaseCredentials;
+	@Autowired
+	private Messenger messenger;
+    @Value("${firebase.FIREBASE_NAME}")
+	private String FIREBASE_BUCKET_NAME;
+	@Override
+	public Object addProduct(ProductRequest product) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object updateProduct(String profileId, Long productId, ProductRequest product, MultipartFile image) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean deleteProduct(String profileId, Long productId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

@@ -1,0 +1,100 @@
+package com.ecommerce.mb.commerce.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+import javax.imageio.ImageIO;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import com.ecommerce.mb.commerce.mapper.GenericMapper;
+import com.ecommerce.mb.commerce.models.repository.CategoryRepository;
+import com.ecommerce.mb.commerce.models.repository.CommerceRepository;
+import com.ecommerce.mb.commerce.models.repository.ImageRepository;
+import com.ecommerce.mb.commerce.models.repository.ProductRepository;
+import com.ecommerce.mb.commerce.models.request.ProductRequest;
+import com.ecommerce.mb.commerce.service.interfaces.ProductService;
+import com.ecommerce.mb.commerce.utils.FirebaseCredenciales;
+import com.ecommerce.mb.commerce.utils.Messenger;
+import com.ecommerce.mb.commons.exceptions.InvalidCredentialsException;
+import com.ecommerce.mb.commons.models.entity.Commerce;
+import com.ecommerce.mb.commons.models.entity.Product;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
+
+
+
+@Service
+public class ProductServiceImpl implements ProductService{
+	@Autowired
+    private ProductRepository productRepository;
+	@Autowired
+    private CommerceRepository commerceRepository;
+	@Autowired
+    private CategoryRepository categoryRepository;
+	@Autowired
+    private ImageRepository imageRepository;
+	@Autowired
+    private FirebaseCredenciales firebaseCredentials;
+	@Autowired
+	private GenericMapper mapper;
+	@Autowired
+	private Messenger messenger;
+    @Value("${firebase.FIREBASE_NAME}")
+	private String FIREBASE_BUCKET_NAME;
+	
+
+	@Override
+	public Object updateProduct(String profileId, Long productId, ProductRequest product, MultipartFile image) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean deleteProduct(String profileId, Long productId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Object addProduct(ProductRequest request, String profileId, MultipartFile image) throws NumberFormatException, InvalidCredentialsException {
+		Commerce commerce=commerceRepository.findById(Long.valueOf(profileId)).orElseThrow(()->new InvalidCredentialsException("The commerce not exist."));
+		Product product =mapper.map(request, Product.class);
+		return null;
+	}
+	private String uploadDocument(MultipartFile document)
+			throws IOException, FileNotFoundException, java.io.IOException {
+		String fileName = UUID.randomUUID().toString() + "_" + document.getOriginalFilename();
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(firebaseCredentials.getCredenciales().toString().getBytes(StandardCharsets.UTF_8));
+		GoogleCredentials credentials = GoogleCredentials.fromStream(inputStream);
+		Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
+		BlobId blobId = BlobId.of(FIREBASE_BUCKET_NAME, "imagenesPerfil/" + fileName);
+		BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType(document.getContentType())
+				.setContentDisposition("inline").build();
+		Blob blob = storage.create(blobInfo, document.getBytes(),
+				Storage.BlobTargetOption.predefinedAcl(Storage.PredefinedAcl.PUBLIC_READ));
+		String publicUrl = blob.getMediaLink();
+		return publicUrl;
+	}
+}
